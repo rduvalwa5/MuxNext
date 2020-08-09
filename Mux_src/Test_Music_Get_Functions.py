@@ -10,7 +10,7 @@ from Music_Get_Functions import musicGet_Functions
 
 class TestResults:
     if platform.uname().node == 'MaxBookPro17OSX.hsd1.wa.comcast.net':
-        cover_count = 787
+        cover_count = 776
         songs_count = 11944
         artist_count = 585
         artist_albums_count = 1238

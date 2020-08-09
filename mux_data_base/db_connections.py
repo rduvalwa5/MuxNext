@@ -10,8 +10,8 @@ import pymysql.cursors # as connDb
 #from NextMusicdb_info import login_info_default, login_info_osxAir, login_info_xps, login_info_WIN64_Air, login_info_osx
 
 class TestResults:
-    if platform.uname().node == 'MaxBookPro17OSX.hsd1.wa.comcast.net':
-        cover_count = 782
+    if platform.uname().node == 'MaxBookPro17OSX.local':
+        cover_count = 864
         songs_count = 11935
         artist_count = 576
         artist_albums_count = 1227
@@ -46,7 +46,7 @@ class musicGet_Functions:
         if platform.uname().node == 'C1246895-XPS':
             self.conn = pymysql.connect(host='OSXAir', user='rduval', password='blu4jazz', db='NextMusic')
 #            self.conn  = c.connect(login_info_xps)
-        elif platform.uname().node == 'MaxBookPro17OSX.hsd1.wa.comcast.net':
+        elif platform.uname().node == 'MaxBookPro17OSX.local':
             self.conn = pymysql.connect(host='localhost', user='rduvalwa2', password='blu4jazz', db='NextMusic')
             self.server = 'MaxBookPro17OSX' 
             self.base = "/Users/rduvalwa2/iTunes/iTunes Media/NextMusic"
