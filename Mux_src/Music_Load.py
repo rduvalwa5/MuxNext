@@ -7,7 +7,7 @@ from Musicdb_info import login_info_default, login_info_osxAir, login_info_xps, 
 
 class musicLoad_Functions:
 
-    def __init__(self, test=False):
+    def __init__(self, test=True):
         print("*************** Node Name is ", platform.uname().node)
         if platform.uname().node == 'C1246895-XPS':
             self.conn = pymysql.connect(host='OSXAir.home.home', user='rduval', password='blu4jazz', db='Music')
@@ -15,9 +15,11 @@ class musicLoad_Functions:
         elif platform.uname().node == 'C1246895-osx.home.home':
             self.conn = pymysql.connect(host='OSXAir.home.home', user='rduvalwa2', password='blu4jazz', db='Music')
 #            self.conn  = MySQLdb.connect(login_info_osx)
-        elif platform.uname().node == 'OSXAir.home.home':
+        elif platform.uname().node == 'OSXAir.hsd1.wa.comcast.net':
 #            self.conn  = connDb.connect(host='OSXAir.home',user='rduvalwa2',password='blu4jazz',db='Music')
-            self.conn = pymysql.connect(host='OSXAir.home.home', user='rduvalwa2', password='blu4jazz', db='Music')
+            self.conn = pymysql.connect(host='OSXAir.hsd1.wa.comcast.net', user='rduval', password='blu4jazz', db='NextMusic')
+            self.base = "/Users/rduvalwa2/Music/iTunes/iTunes Music/Music"
+            self.server = 'OSXAir' 
         elif platform.uname().node == 'C1246895-WIN64-Air':
         #    self.conn  = connDb.connect(host='OSXAir.home.home',user='rduvalwa2',password='blu4jazz',db='Music')
             self.conn = pymysql.connect(login_info_WIN64_Air)
@@ -28,7 +30,7 @@ class musicLoad_Functions:
             self.server = 'RandallDuvalsMBP'           
         else:
             print("Host is " , 'default')
-            self.conn = pymysql.connect(host='OSXAir.home', user='rduval', password='blu4jazz', db='Music')
+            self.conn = pymysql.connect(host='OSXAir.hsd1.wa.comcast.net', user='rduval', password='blu4jazz', db='Music')
 #        self.base = "/Users/rduvalwa2/Music/iTunes/iTunes Music/Music"
 #        self.server = 'OSXAir.home' 
         self.notTestRun = test

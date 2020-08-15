@@ -24,7 +24,7 @@ class Load_Album_Covers():
             self.server = 'MaxBookPro17OSX' 
             self.base = "/Users/rduvalwa2/python-eclipse-workspace/MuxNext/AlbumCovers"
         elif platform.uname().node == 'OSXAir.hsd1.wa.comcast.net':
-            self.conn = pymysql.connect(host='OSXAir', user='rduvalwa2', password='blu4jazz', db='NextMusic')
+            self.conn = pymysql.connect(host='OSXAir.hsd1.wa.comcast.net', user='rduval', password='blu4jazz', db='NextMusic')
             self.server = 'OSXAir' 
             self.base = "/Users/rduvalwa2/eOxigen-workspace/Mux/AlbumCovers"
         elif platform.uname().node == 'Randalls-MBP.home':
