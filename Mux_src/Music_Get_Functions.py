@@ -37,7 +37,6 @@ import pymysql.cursors
 from Musicdb_info import * #login_info_osx
 from _ast import IsNot
 
-
 class musicGet_Functions:   
 
     def __init__(self, isNotTest):
@@ -46,12 +45,10 @@ class musicGet_Functions:
             serv = login_info_xps
         elif platform.uname().node == 'MaxBookPro17OSX.hsd1.wa.comcast.net':
             serv = login_info_osx
-        elif platform.uname().node == 'OSXAir.home.home':
+        elif platform.uname().node == 'OSXAir.hsd1.wa.comcast.net':
             serv = login_info_osxAir
         elif platform.uname().node == 'C1246895-WIN64-Air':
             serv = login_info_WIN64_Air
-        elif platform.uname().node == 'Randalls-MBP.home':
-            serv = login_info_default
         else:
             print("Host is " , 'default')
             serv = login_info_default
@@ -517,16 +514,31 @@ class musicGet_Functions:
             return "delete successfull "
         except Exception  as e:
             print("Exception is ", e)
-            
-
+    
+    
+    '''
+        Update songs genre by the genre of the album  ********************
+    '''   
+                  
+    def update_AllSongs_genre(self):
+        albums = get_all_albums()
+        cursor = self.conn.cursor()
+        for al in albums:
+            statement = "update nextmusic.album2songs set genre = (select genre from nextmusic.artist_albums where album like '" + al + "' ) where album like '" + al + "';"
+            try:
+               result = cursor.execute(statement)
+               print(result)
+            except self.conn.Error as err:
+                print("Exception is ", err)
+        cursor.close()
+        self.dbConnectionClose()
+         
     '''
         Artist  ********************
     '''
 
     def get_all_artist(self):
-#       select music.artist.index, artist, genre from music.artist where artist = 'Bill Withers';
         fields = "music.artist.artist, music.artist.index"
-#        fields = "*"
         statement = "select " + fields + " from music.artist order by music.artist.artist;"
         print(statement)
         cursor = self.conn.cursor()
@@ -553,7 +565,6 @@ class musicGet_Functions:
         return returnCode
 
     def get_artist(self, artist):
-#       select music.artist.index, artist, genre from music.artist where artist = 'Bill Withers';
         fields = "*"
         statement = "select " + fields + " from music.artist where artist like '" + artist + "';"
         print(statement)
@@ -567,25 +578,6 @@ class musicGet_Functions:
         except self.conn.Error as err:
             print("Exception is ", err)
             return str(err) 
-                             
-#    def add_artist(self, artist, genre):
-#        cursor = self.conn.cursor()
-#        maxIndex = self.get_max_index("artist")
-#        index = maxIndex[0]
-#        newIndex = index + 1
-#        print(newIndex) 
-#        insertStatement = "INSERT into Music.artist (artist.index, artist.artist,artist.genre)  values(" + str(newIndex) + ",\"" + artist + "\",\"" + genre + "\")"
-#        print(insertStatement)
-#        try:
-#            cursor.execute(insertStatement)
-#            commit = "commit;"
-#            cursor.execute(commit)
-#            cursor.close()
-#            print("done")
-#            return "Added " + artist
-#        except self.conn.Error as err:
-#            print("Exception is ", err)
-#            return str(err)
         
     def add_artist(self, artist, genre):
         if self.doesArtistExist(artist) == 'False':
@@ -642,14 +634,12 @@ class musicGet_Functions:
             commit = "commit;"
             cursor.execute(commit)
             cursor.close()
-#            self.dbConnectionClose()
             return "deleted " + artist
         except self.conn.Error as err:
             print("Exception is ", err)
             return str(err) 
 
     def get_artistAlbums_fromAlbums(self, artist):
-#       select music.artist.index, artist, genre fmsom music.artist where artist = 'Bill Withers';
         fields = "*"
         statement = "select " + fields + " from music.artist_albums where artist like '%" + artist + "%';"
         print(statement)
@@ -657,7 +647,6 @@ class musicGet_Functions:
         try:
             cursor.execute(statement)
             result = cursor.fetchall()  
-#            print(result)
             cursor.close()
             self.dbConnectionClose()
             return result   
@@ -666,7 +655,6 @@ class musicGet_Functions:
             return str(err)
         
     def get_artistSongs_fromSongs(self, artist):
-#       select music.artist.index, artist, genre fmsom music.artist where artist = 'Bill Withers';
         fields = "music.album2songs.song, music.album2songs.album"
         statement = "select " + fields + " from music.album2songs where artist like '" + artist + "';"
         print(statement)
@@ -681,6 +669,8 @@ class musicGet_Functions:
         except self.conn.Error as err:
             print("Exception is ", err)
             return str(err)
+        
+        
         
     '''
         Album  ********************
@@ -700,7 +690,33 @@ class musicGet_Functions:
         except self.conn.Error as err:
             print("Exception is ", err)
             return str(err)         
-            
+    
+    def get_album_genre(self, album):
+        statement = "select genre from artist_albums where album like '" + album + "';"
+        try:
+            cursor.execute(statement)
+            result = cursor.fetchall()  
+            cursor.close()
+            self.dbConnectionClose()
+            return result
+        except self.conn.Error as err:
+            print("Exception is ", err)
+            return str(err)         
+
+    def get_album_type(self, album):
+        statement = "select type from artist_albums where album like '" + album + "';"
+        try:
+            cursor.execute(statement)
+            result = cursor.fetchall()  
+            cursor.close()
+            self.dbConnectionClose()
+            return result
+        except self.conn.Error as err:
+            print("Exception is ", err)
+            return str(err)         
+
+
+    
     def get_album(self, album):
 #       select music.artist.index, artist, genre fmsom music.artist where artist = 'Bill Withers';
         fields = "*"
@@ -718,7 +734,6 @@ class musicGet_Functions:
             return str(err) 
 
     def get_album_by_index(self, idx):
-#       select music.artist.index, artist, genre fmsom music.artist where artist = 'Bill Withers';
         fields = "*"
         statement = "select * from music.artist_albums where `index` = " + str(idx) + ";"
         print(statement)
@@ -733,11 +748,7 @@ class musicGet_Functions:
             print("Exception is ", err)
             return str(err) 
 
-
-
     def get_album_songs(self, album):
-#       select music.artist.index, artist, genre fmsom music.artist where artist = 'Bill Withers';
-#        albumSongs = []
         fields = "music.album2songs.song"
         if album == 'all':
             statement = "select " + fields + " from music.album2songs order by `index`;"
@@ -757,8 +768,6 @@ class musicGet_Functions:
             return str(err) 
 
     def get_artist_songs(self, artist):
-#       select music.artist.index, artist, genre fmsom music.artist where artist = 'Bill Withers';
-#        albumSongs = []
         fields = "music.album2songs.song"
         statement = "select " + fields + " from music.album2songs where artist = '" + artist + "';"
         
@@ -794,7 +803,6 @@ class musicGet_Functions:
             cursor.execute(commit)
             result = "album " + album + "added"
             cursor.close()
-#            self.dbConnectionClose()
             return result  
         except self.conn.Error.Error as err:
             print("Exception is ", err)
@@ -861,7 +869,6 @@ class musicGet_Functions:
             result = cursor.fetchall()
             return result
             cursor.close()
-#            self.dbConnectionClose()
             return result  
         except self.conn.Error as err:
             print("Exception is ", err)
@@ -877,7 +884,6 @@ class musicGet_Functions:
             print("XXXget_album_cover result ", result)
             return result
             cursor.close()
-#            self.dbConnectionClose()
             return result  
         except self.conn.Error as err:
             print("Exception is ", err)
@@ -891,7 +897,6 @@ class musicGet_Functions:
             result = cursor.fetchone()
             return result[0]
             cursor.close()
-#            self.dbConnectionClose()
             return result  
         except self.conn.Error as err:
             print("Exception is ", err)
@@ -911,7 +916,6 @@ class musicGet_Functions:
             maxCover = idx[0] 
         newIdx = maxCover + 1   
         print("*********** New covver    ", newIdx) 
-#        statement = insert into `Music`.album_covers values ('BobbyDarin_MackTheKnife.jpeg','',303,'');
         statement = "insert into `Music`.album_covers(`cover_idx`,`album_cover`,`album`,`description`) values (" + str(newIdx) + ",'" + cover + "','" + album + "'," + "'No description');"
         print(statement)
         cursor.execute(statement)
