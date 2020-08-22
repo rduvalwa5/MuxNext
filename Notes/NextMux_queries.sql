@@ -406,8 +406,6 @@ select  distinct album2songs.`album`, artist_albums.`album`, album2songs.genre, 
 from NextMusic.album2songs, NextMusic.artist_albums 
 where artist_albums.album = album2songs.`album`
 and  artist_albums.genre != album2songs.genre
--- and  album2songs.artist  = 'Gladys Knight & The Pips'
---  and  artist_albums.artist = 'Gladys Knight & The Pips'
 order by album2songs.`album`;
 
 select * from album2songs where artist like 'Donovan';
@@ -434,6 +432,6 @@ and  artist_albums.type != album2songs.type
 order by album2songs.`album`;
 
 
-update album2songs set album2songs.type = "CD" where album2songs.album like "The Best of Blondie";
+update nextmusic.album2songs set album2songs.type = "CD" where album2songs.genre like "TexMex";
 
 update artist_albums set type = 'CD' where album like "The Best of Blondie";
