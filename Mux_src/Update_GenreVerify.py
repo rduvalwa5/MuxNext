@@ -1,6 +1,6 @@
 '''
 Created on Aug 19, 2020
-
+This code compares Type code between Albums and songs
 @author: rduvalwa2
 '''
 import platform
@@ -31,40 +31,28 @@ if __name__ == "__main__" :
       
         m = musicGet_Functions(True)
         
-        statement = "select album from nextmusic.artist_albums order by artist_albums.album;"
-        print(statement)
+        statement = "select  distinct album2songs.`album`, artist_albums.`album`, album2songs.genre, artist_albums.genre, album2songs.artist \
+from NextMusic.album2songs, NextMusic.artist_albums \
+where artist_albums.album = album2songs.`album` \
+and  artist_albums.genre != album2songs.genre \
+order by album2songs.`album`; \
+"
+            
+#        print(statement)
         cursor = conn.cursor()
         try:
             cursor.execute(statement)
-            allAlbums = cursor.fetchall()  
-            cursor.close()
+            result = cursor.fetchall()  
+            print(result)
+            if not result:
+                print("Types between album and songs the same")
         except conn.Error as err:
             print("Exception is ", err)
-        print(allAlbums)
-        cursor = conn.cursor()
-        for al in allAlbums:
-            album = list(al)
-            print(album[0].strip('\''))
-            thisAl = album[0].strip('\'')
-            genreStatement = "select type from nextmusic.artist_albums where album like \"" + thisAl + "\";"
-            print(genreStatement)
-            cursor.execute(genreStatement)
-            gen = cursor.fetchone()
-            print(gen)
-            ge = str(gen)
-            g = ge.strip('(),')
-            print(g)
-            updateStatement = "update nextmusic.album2songs set type = " + g + " where album like '"+thisAl+"';"
-            print(updateStatement)
-
-            try:
-                result = cursor.execute(updateStatement)
-                print(result)
-            except conn.Error as err:
-                print("Exception is ", err)
-        cursor.execute("commit;")
+#        print(result)
+        for output in result:
+            res = list(output)
+            print(res)
         cursor.close()
-#        dbConnectionClose()
 
     
     
